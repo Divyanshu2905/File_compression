@@ -55,13 +55,13 @@ class create{
             if (left(i)>size-1)
             {
                 return;
-                cout<<"here1 ";
+                
             }
             else if (left(i)==size-1)
             {
                 if (A[i]->freq>A[left(i)]->freq)
                 {
-                    cout<<"here6 ";
+                    
                     swap(A[i],A[left(i)]);
                     minheapify(left(i));
                 }
@@ -69,28 +69,26 @@ class create{
             else{
                 if (A[left(i)]->freq>A[right(i)]->freq)
                 {
-                    cout<<"here2 ";
+                    
                     if (A[i]->freq>A[right(i)]->freq)
                     {
-                        cout<<"here3 ";
+                        
                         swap(A[i],A[right(i)]);
                         minheapify(right(i));
                     }
-                    cout<<"here4 ";
+                    
                 }
                 else
                 {
-                    cout<<"here5 ";
+                    
                     if (A[i]->freq>A[left(i)]->freq)
                     {
-                        cout<<"here6 ";
+                        
                         swap(A[i],A[left(i)]);
                         minheapify(left(i));
                     }
-                    cout<<"here7 ";
                 }
             }
-            
         }
         void heapify(){
             cout<<"entered heapify"<<endl;
@@ -103,6 +101,29 @@ class create{
                 cout<<"completed loop"<<endl;
             }
         }
+        datas*extractmin(){
+            datas *min=new datas;
+            min=A[0];
+            swap(A[0],A[size-1]);
+            size--;
+            minheapify(0);
+            return min;
+        }
+        datas *huffmantree(){
+            int n=size-1;
+            for (int i = 0; i < n; i++)
+            {
+                datas*newnode= new datas;
+                newnode->lefts=extractmin();
+                newnode->rights=A[0];
+                newnode->freq=((newnode->lefts->freq)+(newnode->rights->freq));
+                A[0]=newnode;
+                minheapify(0);
+                print();
+            }
+            cout<<"success"<<endl;
+            return A[0];
+        }
         void print(){
             int count=1;
             for (int i = 0; i < size; i++)
@@ -112,8 +133,10 @@ class create{
                     cout<<endl;
                     count++;
                 }
-                cout<<A[i]->x<<" "<<A[i]->freq<<" ";
+                cout<<" "<<A[i]->freq<<" ";
             }
+            cout<<endl;
+            cout<<endl;
         }
 };
 int main(){
@@ -135,4 +158,5 @@ int main(){
     B.heapify();
     cout<<"heapified"<<endl;
     B.print();
+    B.huffmantree();
 }
