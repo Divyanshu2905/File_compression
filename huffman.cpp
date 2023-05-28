@@ -124,6 +124,19 @@ class create{
             cout<<"success"<<endl;
             return A[0];
         }
+        void generatecodes(datas*root,string code,unordered_map<char,string>& X){
+            if (root==NULL)
+            {
+                return;
+            }
+            else if (root->lefts==NULL and root->rights==NULL)
+            {
+                X[root->x]=code;
+                return;
+            }
+            generatecodes(root->lefts,code+'0',X);
+            generatecodes(root->rights,code+'1',X); 
+        }
         void print(){
             int count=1;
             for (int i = 0; i < size; i++)
@@ -141,6 +154,7 @@ class create{
 };
 int main(){
     create B(6);
+    unordered_map<char,string>codes;
     for (int i = 0; i < 6; i++)
     {
         B.A[i]=new datas;
@@ -159,4 +173,9 @@ int main(){
     cout<<"heapified"<<endl;
     B.print();
     B.huffmantree();
+    string code;
+    B.generatecodes(B.A[0],code,codes);
+    for (const auto& pair : codes) {
+        cout<< pair.first << ": " << pair.second <<endl;
+    }
 }
