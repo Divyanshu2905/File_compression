@@ -10,11 +10,17 @@ void calculatefreq(string& file,unordered_map<char,int>& frequency){
             }
             input.close();
 }
-string writedata(string& file2, string output, unordered_map<char,int> frequency){
+string writedata(string& file2, string output, unordered_map<char,string> codes){
     ofstream writeoutput(file2,ios::binary);
-    for(const auto& pair :frequency){
-        writeoutput<<pair.first;
-        writeoutput.write(reinterpret_cast<const char*>(&pair.second),sizeof(int));
+    size_t map=codes.size();
+    writeoutput.write(reinterpret_cast<const char*>(&map),sizeof(size_t));
+    for(const auto& pair :codes){
+        char c=pair.first;
+        string code=pair.second;
+        size_t codeSize=code.size();
+        writeoutput.write(&c,sizeof(char));
+        writeoutput.write(reinterpret_cast<const char*>(&codeSize),sizeof(size_t));
+        writeoutput.write(code.c_str(),codeSize);
     }
     bitset<8> byte;
     int index=0;
@@ -56,6 +62,9 @@ void processdata(string& file,string& file2){
             string code;
             calculatefreq(file,frequency);
             int n=frequency.size();
+            for (const auto& pair : frequency) {
+                cout<< pair.first << ": " << pair.second <<endl;
+            }
             create B(n);
             int counter=0;
             for (const auto& pair : frequency) {
@@ -74,7 +83,7 @@ void processdata(string& file,string& file2){
                 cout<< pair.first << ": " << pair.second <<endl;
             }
             string output=compressdata(file,codes);
-            writedata(file2,output,frequency);
+            writedata(file2,output,codes);
 }
 int main(){
     string s;
