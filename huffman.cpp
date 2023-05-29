@@ -115,7 +115,7 @@ class create{
             {
                 datas*newnode= new datas;
                 newnode->lefts=extractmin();
-                newnode->rights=A[0];
+                newnode->rights=A[0];  
                 newnode->freq=((newnode->lefts->freq)+(newnode->rights->freq));
                 A[0]=newnode;
                 minheapify(0);
@@ -146,7 +146,11 @@ class create{
                     cout<<endl;
                     count++;
                 }
-                cout<<" "<<A[i]->freq<<" ";
+                if (A[i]->lefts==NULL)
+                {
+                    cout<<A[i]->x<<" ";
+                }
+                cout<<A[i]->freq<<"     ";
             }
             cout<<endl;
             cout<<endl;

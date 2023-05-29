@@ -13,6 +13,8 @@ void calculatefreq(string& file,unordered_map<char,int>& frequency){
 string writedata(string& file2, string output, unordered_map<char,string> codes){
     ofstream writeoutput(file2,ios::binary);
     size_t map=codes.size();
+    size_t stringsize=output.size();
+    writeoutput.write(reinterpret_cast<const char*>(&stringsize),sizeof(size_t));
     writeoutput.write(reinterpret_cast<const char*>(&map),sizeof(size_t));
     for(const auto& pair :codes){
         char c=pair.first;
@@ -28,11 +30,12 @@ string writedata(string& file2, string output, unordered_map<char,string> codes)
     {
         if (bit=='1')
         {
-            byte.set(index);
+            byte.set(7-index);
         }
         index++;
         if (index==8)
         {
+            cout<<byte<<endl;
             writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
             byte.reset();
             index=0;
@@ -40,6 +43,7 @@ string writedata(string& file2, string output, unordered_map<char,string> codes)
     }
     if (index>0)
     {
+        cout<<byte<<endl;
         writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
     }
     writeoutput.close();
@@ -53,6 +57,7 @@ string compressdata(string& file,unordered_map<char,string>codes){
         output=output+codes.at(c);
     }
     input.close();
+    cout<<"input string "<<output<<endl;
     return output;
 }
 
