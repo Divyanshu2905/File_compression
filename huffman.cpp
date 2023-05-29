@@ -152,30 +152,3 @@ class create{
             cout<<endl;
         }
 };
-int main(){
-    create B(6);
-    unordered_map<char,string>codes;
-    for (int i = 0; i < 6; i++)
-    {
-        B.A[i]=new datas;
-        cin>>(B.A[i]->freq);
-        cout<<"taking inputs "<<B.A[i]->freq<<endl;
-    }
-    for (int i = 0; i < 6; i++)
-    {
-        cin>>(B.A[i]->x);
-        cout<<"taking inputs "<<B.A[i]->x<<endl;
-    }
-    cout<<"out of loop"<<endl;
-    B.size=6;
-    cout<<"size set to 6"<<endl;
-    B.heapify();
-    cout<<"heapified"<<endl;
-    B.print();
-    B.huffmantree();
-    string code;
-    B.generatecodes(B.A[0],code,codes);
-    for (const auto& pair : codes) {
-        cout<< pair.first << ": " << pair.second <<endl;
-    }
-}
