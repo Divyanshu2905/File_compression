@@ -16,6 +16,28 @@ string writedata(string& file2, string output, unordered_map<char,int> frequency
         writeoutput<<pair.first;
         writeoutput.write(reinterpret_cast<const char*>(&pair.second),sizeof(int));
     }
+    bitset<8> byte;
+    int index=0;
+    for (char bit : output)
+    {
+        if (bit=='1')
+        {
+            byte.set(index);
+        }
+        index++;
+        if (index==8)
+        {
+            writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
+            byte.reset();
+            index=0;
+        }
+    }
+    if (index>0)
+    {
+        writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
+    }
+    writeoutput.close();
+    
 }
 string compressdata(string& file,unordered_map<char,string>codes){
     ifstream input(file,ios::binary);
@@ -51,10 +73,14 @@ void processdata(string& file,string& file2){
             for (const auto& pair : codes) {
                 cout<< pair.first << ": " << pair.second <<endl;
             }
-            compressdata(file,codes);
+            string output=compressdata(file,codes);
+            writedata(file2,output,frequency);
 }
 int main(){
-    string inputfile="input.txt";
-    string outputfile="compress.huf";
-    processdata(inputfile,outputfile);   
+    string s;
+    cout<<"file to compress"<<endl;
+    cin>>s;
+    string inputfile=s;
+    string outputfile="compress.bin";
+    processdata(inputfile,outputfile);  
 }
