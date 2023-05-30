@@ -43,22 +43,23 @@ string calculatefreq(string& file,unordered_map<string,char>& codes){
             break;
         }
     }
-    cout<<decode;
     inputfile.close();
     return decode;
 }
 void processdata(string& file,string& file2){
             unordered_map<string,char>codes;
             string decode=calculatefreq(file,codes);
-            for (const auto& pair : codes) {
-                cout<< pair.first << ": " << pair.second <<endl;
-            }
             ofstream outputfile(file2,ios::binary);
             outputfile.write(decode.c_str(),decode.size());
             outputfile.close();
 }
 int main(){
-    string input="compress.bin";
+    string s;
+    cout<<"File to decompress: ";
+    cin>>s;
+    string input=s;
     string output="output.txt";
+    cout<<"processing..!"<<endl;
     processdata(input,output);
+    cout<<"Completed file in output.txt";
 }

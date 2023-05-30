@@ -38,19 +38,6 @@ class create{
         int parent(int i){
             return ((i-1)/2);
         }
-        void buildheap(int i, char c){
-            A[size]->freq=i;
-            A[size]->x=c;
-            int child1=(size);
-            int parent1=parent(child1);
-            while (child1!=0 and A[parent1]->freq>A[child1]->freq)
-            {
-                swap(A[parent1],A[child1]);
-                child1=parent1;
-                parent1=parent(parent1);
-            }
-            size++;
-        }
         void minheapify(int i){
             if (left(i)>size-1)
             {
@@ -72,18 +59,15 @@ class create{
                     
                     if (A[i]->freq>A[right(i)]->freq)
                     {
-                        
                         swap(A[i],A[right(i)]);
                         minheapify(right(i));
                     }
                     
                 }
                 else
-                {
-                    
+                {                    
                     if (A[i]->freq>A[left(i)]->freq)
-                    {
-                        
+                    {                       
                         swap(A[i],A[left(i)]);
                         minheapify(left(i));
                     }
@@ -91,14 +75,10 @@ class create{
             }
         }
         void heapify(){
-            cout<<"entered heapify"<<endl;
             int roots=parent(size-1);
-            cout<<"found root"<<endl;
             for (int i = roots; i > -1; i--)
             {
-                cout<<"entered loop"<<endl;
                 minheapify(i);
-                cout<<"completed loop"<<endl;
             }
         }
         datas*extractmin(){
@@ -119,9 +99,7 @@ class create{
                 newnode->freq=((newnode->lefts->freq)+(newnode->rights->freq));
                 A[0]=newnode;
                 minheapify(0);
-                print();
             }
-            cout<<"success"<<endl;
             return A[0];
         }
         void generatecodes(datas*root,string code,unordered_map<char,string>& X){
@@ -136,23 +114,5 @@ class create{
             }
             generatecodes(root->lefts,code+'0',X);
             generatecodes(root->rights,code+'1',X); 
-        }
-        void print(){
-            int count=1;
-            for (int i = 0; i < size; i++)
-            {
-                if (i+1==pow(2,count))
-                {
-                    cout<<endl;
-                    count++;
-                }
-                if (A[i]->lefts==NULL)
-                {
-                    cout<<A[i]->x<<" ";
-                }
-                cout<<A[i]->freq<<"     ";
-            }
-            cout<<endl;
-            cout<<endl;
         }
 };

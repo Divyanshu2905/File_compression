@@ -35,19 +35,16 @@ string writedata(string& file2, string output, unordered_map<char,string> codes)
         index++;
         if (index==8)
         {
-            cout<<byte<<endl;
-            writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
+            writeoutput.write(reinterpret_cast<const char*>(&byte),sizeof(char));
             byte.reset();
             index=0;
         }
     }
     if (index>0)
     {
-        cout<<byte<<endl;
         writeoutput.write(reinterpret_cast<const char*>(&byte), sizeof(char));
     }
     writeoutput.close();
-    
 }
 string compressdata(string& file,unordered_map<char,string>codes){
     ifstream input(file,ios::binary);
@@ -57,7 +54,6 @@ string compressdata(string& file,unordered_map<char,string>codes){
         output=output+codes.at(c);
     }
     input.close();
-    cout<<"input string "<<output<<endl;
     return output;
 }
 
@@ -67,34 +63,28 @@ void processdata(string& file,string& file2){
             string code;
             calculatefreq(file,frequency);
             int n=frequency.size();
-            for (const auto& pair : frequency) {
-                cout<< pair.first << ": " << pair.second <<endl;
-            }
             create B(n);
             int counter=0;
             for (const auto& pair : frequency) {
                 B.A[counter]=new datas;
                 B.A[counter]->x=pair.first;
-                cout<<B.A[counter]->x;
                 B.A[counter]->freq=pair.second;
-                cout<<B.A[counter]->freq;
                 counter++; 
             }
             B.size=n;
             B.heapify();
             B.huffmantree();
             B.generatecodes(B.A[0],code,codes);
-            for (const auto& pair : codes) {
-                cout<< pair.first << ": " << pair.second <<endl;
-            }
             string output=compressdata(file,codes);
             writedata(file2,output,codes);
 }
 int main(){
     string s;
-    cout<<"file to compress"<<endl;
+    cout<<"File to compress: ";
     cin>>s;
     string inputfile=s;
     string outputfile="compress.bin";
-    processdata(inputfile,outputfile);  
+    cout<<"processing..!"<<endl;
+    processdata(inputfile,outputfile);
+    cout<<"Completed file in compress.bin";
 }
