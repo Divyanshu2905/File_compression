@@ -1,15 +1,17 @@
 #include<bits/stdc++.h>
 #include "huffman.cpp"
 using namespace std;
-string calculatefreq(string& file,unordered_map<string,char>& codes){
+
+//Function to read,decode data in file
+string read_decode(string& file,unordered_map<string,char>& codes){
     ifstream inputfile(file,ios::binary);
     int n;
     char c;
     size_t mapsize;
     size_t stringsize;
-    inputfile.read(reinterpret_cast<char*>(&stringsize), sizeof(size_t));
-    inputfile.read(reinterpret_cast<char*>(&mapsize), sizeof(size_t));
-    for (size_t i = 0; i < mapsize; ++i)
+    inputfile.read(reinterpret_cast<char*>(&stringsize), sizeof(size_t));       //reads string size that is to be decoded
+    inputfile.read(reinterpret_cast<char*>(&mapsize), sizeof(size_t));          //reads encoding mapsize
+    for (size_t i = 0; i < mapsize; ++i)                                        //reads map
     {
         char c;
         size_t codesize;
@@ -19,7 +21,7 @@ string calculatefreq(string& file,unordered_map<string,char>& codes){
         inputfile.read(&code[0],codesize);
         codes[code]=c;
     }
-    string compressdata;
+    string compressdata;                                                        //reads compressed data
     bitset<8> bits;
     char byte;
     while (inputfile.read(&byte,sizeof(char)))
@@ -27,7 +29,7 @@ string calculatefreq(string& file,unordered_map<string,char>& codes){
         bits=static_cast<unsigned char>(byte);
         compressdata=compressdata+bits.to_string();
     }
-    int i=0;
+    int i=0;                                                                    //decodes data untilstring size is reached and ignores extra bits
     string code;
     string decode;
     for(char bit: compressdata){
@@ -46,13 +48,17 @@ string calculatefreq(string& file,unordered_map<string,char>& codes){
     inputfile.close();
     return decode;
 }
+
+//Main Decompressing Function to call other funnctions
 void processdata(string& file,string& file2){
             unordered_map<string,char>codes;
-            string decode=calculatefreq(file,codes);
+            string decode=read_decode(file,codes);
             ofstream outputfile(file2,ios::binary);
             outputfile.write(decode.c_str(),decode.size());
             outputfile.close();
 }
+
+//Driver Function
 int main(){
     string s;
     cout<<"File to decompress: ";

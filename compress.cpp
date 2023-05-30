@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 #include "huffman.cpp"
 using namespace std;
+
+//Function Calculate frequency of charachters in file
 void calculatefreq(string& file,unordered_map<char,int>& frequency){
             ifstream input(file,ios::binary);
             char c;
@@ -10,13 +12,27 @@ void calculatefreq(string& file,unordered_map<char,int>& frequency){
             }
             input.close();
 }
+
+//Function to write encoded data in string
+string compressdata(string& file,unordered_map<char,string>codes){
+    ifstream input(file,ios::binary);
+    string output;
+    char c;
+    while(input.get(c)){
+        output=output+codes.at(c);
+    }
+    input.close();
+    return output;
+}
+
+//Function to encoded data in file
 string writedata(string& file2, string output, unordered_map<char,string> codes){
     ofstream writeoutput(file2,ios::binary);
     size_t map=codes.size();
     size_t stringsize=output.size();
-    writeoutput.write(reinterpret_cast<const char*>(&stringsize),sizeof(size_t));
-    writeoutput.write(reinterpret_cast<const char*>(&map),sizeof(size_t));
-    for(const auto& pair :codes){
+    writeoutput.write(reinterpret_cast<const char*>(&stringsize),sizeof(size_t));       //writes string size
+    writeoutput.write(reinterpret_cast<const char*>(&map),sizeof(size_t));              //writes mapsize
+    for(const auto& pair :codes){                                                       //writes coding map
         char c=pair.first;
         string code=pair.second;
         size_t codeSize=code.size();
@@ -24,7 +40,7 @@ string writedata(string& file2, string output, unordered_map<char,string> codes)
         writeoutput.write(reinterpret_cast<const char*>(&codeSize),sizeof(size_t));
         writeoutput.write(code.c_str(),codeSize);
     }
-    bitset<8> byte;
+    bitset<8> byte;                                                                     //Writes encoded string in form of bytes
     int index=0;
     for (char bit : output)
     {
@@ -46,17 +62,8 @@ string writedata(string& file2, string output, unordered_map<char,string> codes)
     }
     writeoutput.close();
 }
-string compressdata(string& file,unordered_map<char,string>codes){
-    ifstream input(file,ios::binary);
-    string output;
-    char c;
-    while(input.get(c)){
-        output=output+codes.at(c);
-    }
-    input.close();
-    return output;
-}
 
+//Main compressing function to call other function step-by-step
 void processdata(string& file,string& file2){
             unordered_map<char,int> frequency;
             unordered_map<char,string>codes;
@@ -65,19 +72,20 @@ void processdata(string& file,string& file2){
             int n=frequency.size();
             create B(n);
             int counter=0;
-            for (const auto& pair : frequency) {
+            for (const auto& pair : frequency){         //Assigning values to nodes 
                 B.A[counter]=new datas;
                 B.A[counter]->x=pair.first;
                 B.A[counter]->freq=pair.second;
                 counter++; 
             }
-            B.size=n;
             B.heapify();
             B.huffmantree();
             B.generatecodes(B.A[0],code,codes);
             string output=compressdata(file,codes);
             writedata(file2,output,codes);
 }
+
+//Driver function
 int main(){
     string s;
     cout<<"File to compress: ";

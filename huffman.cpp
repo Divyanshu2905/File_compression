@@ -1,11 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 class datas{
+    //Main class for creating nodes for the huffman tree 
     public:
         char x;
         int freq;
         datas* lefts;
         datas* rights;
+        //3 type of constructors for handling all types of declarations used
         datas(){
             lefts=rights=NULL;
         }
@@ -19,50 +21,50 @@ class datas{
             lefts=rights=NULL;
         }
 };
+
 class create{
+    //Main class to create heap(Array-form) of starting nodes
     public:
         int size;
-        int cap;
         datas **A;
-        create(int c){
+        create(int c){                  //Constructor
             A=new datas*[c];
-            size=0;
-            cap=c;
+            size=c;
         }
-        int left(int i){
+
+        int left(int i){                //Function to return left child in heap.
             return((2*i)+1);
         }
-        int right(int i){
+        int right(int i){               //Function to return left child in heap.
             return((2*i)+2);
         }
-        int parent(int i){
+        int parent(int i){              //Function to return parent in heap.
             return ((i-1)/2);
         }
-        void minheapify(int i){
+
+        //Function to minheapify Array when only indexed element is at fault
+
+        void minheapify(int i){ 
             if (left(i)>size-1)
             {
-                return;
-                
+                return;  
             }
             else if (left(i)==size-1)
             {
                 if (A[i]->freq>A[left(i)]->freq)
-                {
-                    
+                {                    
                     swap(A[i],A[left(i)]);
                     minheapify(left(i));
                 }
             }
             else{
                 if (A[left(i)]->freq>A[right(i)]->freq)
-                {
-                    
+                { 
                     if (A[i]->freq>A[right(i)]->freq)
                     {
                         swap(A[i],A[right(i)]);
                         minheapify(right(i));
                     }
-                    
                 }
                 else
                 {                    
@@ -74,14 +76,20 @@ class create{
                 }
             }
         }
-        void heapify(){
+
+        //Function to minheapify the whole array
+
+        void heapify(){                  
             int roots=parent(size-1);
             for (int i = roots; i > -1; i--)
             {
                 minheapify(i);
             }
         }
-        datas*extractmin(){
+
+        //Function to extract the minimum freq node from array
+
+        datas*extractmin(){              
             datas *min=new datas;
             min=A[0];
             swap(A[0],A[size-1]);
@@ -89,7 +97,10 @@ class create{
             minheapify(0);
             return min;
         }
-        datas *huffmantree(){
+
+        //Function to create huffmantree
+
+        datas *huffmantree(){        
             int n=size-1;
             for (int i = 0; i < n; i++)
             {
@@ -102,7 +113,10 @@ class create{
             }
             return A[0];
         }
-        void generatecodes(datas*root,string code,unordered_map<char,string>& X){
+
+        //This function generates codes for leaf nodes by traversing huffman tree 
+
+        void generatecodes(datas*root,string code,unordered_map<char,string>& X){      
             if (root==NULL)
             {
                 return;
