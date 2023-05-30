@@ -88,11 +88,14 @@ void processdata(string& file,string& file2){
 //Driver function
 int main(){
     string s;
+    string t;
     cout<<"File to compress: ";
     cin>>s;
+    cout<<"Enter destination: ";
+    cin>>t;
     string inputfile=s;
-    string outputfile="compress.bin";
+    string outputfile=t;
     cout<<"processing..!"<<endl;
     processdata(inputfile,outputfile);
-    cout<<"Completed file in compress.bin";
+    cout<<"Completed";
 }

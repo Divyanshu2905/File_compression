@@ -61,11 +61,14 @@ void processdata(string& file,string& file2){
 //Driver Function
 int main(){
     string s;
+    string t;
     cout<<"File to decompress: ";
     cin>>s;
+    cout<<"Enter destination: ";
+    cin>>t;
     string input=s;
-    string output="output.txt";
+    string output=t;
     cout<<"processing..!"<<endl;
     processdata(input,output);
-    cout<<"Completed file in output.txt";
+    cout<<"Completed";
 }
